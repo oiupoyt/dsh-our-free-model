@@ -105,17 +105,18 @@ export const CAPABILITIES = [
  *   measured override (models.dev lists `image`, but an image request 500s).
  */
 const FREE_ID_OVERRIDES = {
-  // models.dev: effort low|high|max; limit 200000/32000 (floor — see above).
+  // models.dev: effort low|high|max; limit 200000/32000. The 1M probe is stale
+  // — the enforced window is the published one, or the harness never compacts in time (#494/#464).
   'deepseek-v4.1-flash-free': {
-    vision: true, contextWindow: 1048576, maxOutput: 384000,
+    vision: true, contextWindow: 200000, maxOutput: 32000,
     efforts: ['disabled', 'low', 'high', 'max'], effortDefault: 'high',
     effortPatch: { reasoning_effort: '$effort' },
     effortOffPatch: { reasoning_effort: 'none' },
   },
-  // models.dev: effort low|high|max. No `none` in the set, and thinking does
-  // not switch off in practice, so the menu starts at low.
+  // models.dev: effort low|high|max, limit 200000/32000. No `none` in the set,
+  // and thinking does not switch off in practice, so the menu starts at low.
   'glm-5.3-flash-free': {
-    vision: true, contextWindow: 1048576, maxOutput: 131072,
+    vision: true, contextWindow: 200000, maxOutput: 32000,
     efforts: ['low', 'high', 'max'], effortDefault: 'high',
     effortPatch: { reasoning_effort: '$effort' },
   },
